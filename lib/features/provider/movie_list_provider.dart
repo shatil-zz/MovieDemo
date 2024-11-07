@@ -16,6 +16,23 @@ class MovieListProvider extends ChangeNotifier {
 
   searchAllMovies(String searchText) {
     this.searchText = searchText;
+    searchMovies = MovieListModel();
+    if (searchText.trim().isNotEmpty) {
+      searchNextPage();
+    } else {
+      notifyListeners();
+    }
+  }
+
+  searchNextPage() async {
+    notifyListeners();
+    searchMovies.isLoading = true;
+    searchMovies.error = null;
+    Map? response =
+        await repository.searchMovies(searchMovies.pageCount + 1, searchText);
+    searchMovies.updateFromResponse(response);
+    searchMovies.isLoading = false;
+    notifyListeners();
   }
 
   loadAllMovies() {

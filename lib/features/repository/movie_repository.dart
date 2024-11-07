@@ -32,4 +32,22 @@ class MovieRepository {
       return null;
     }
   }
+
+  Future<Map?> searchMovies(int page, String text) async {
+    try {
+      Map<String, String> queryParams = {
+        "api_key": "4bc53930f5725a4838bf943d02af6aa9",
+        "language": "en-US",
+        "page": "$page",
+        "query": "text"
+      };
+      var url = Uri.https('api.themoviedb.org', '/3/search/movie', queryParams);
+      var response = await http.get(url);
+      if (response.statusCode == 200) return jsonDecode(response.body);
+      return null;
+    } catch (ex) {
+      print(ex.toString());
+      return null;
+    }
+  }
 }
